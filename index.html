@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votómetro – Elecciones Perú 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul: #003087;
+  --azul-medio: #0057C2;
+  --azul-suave: #EEF3FF;
+  --amarillo: #F5C518;
+  --rojo: #D91023;
+  --gris-fondo: #F4F7FB;
+  --gris-borde: #E2E8F0;
+  --gris-texto: #64748B;
+  --negro: #1A1A2E;
+  --blanco: #FFFFFF;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--gris-fondo); color: var(--negro); min-height: 100vh; }
+
+/* ===== NAV ===== */
+nav {
+  background: var(--azul);
+  padding: 0 2rem;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,48,135,0.25);
+}
+.logo { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 900; color: #fff; cursor: pointer; }
+.logo span { color: var(--amarillo); }
+.lang-switcher { display: flex; gap: 0.4rem; }
+.lang-btn {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7); padding: 0.3rem 0.7rem; border-radius: 20px;
+  font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.lang-btn.active, .lang-btn:hover { background: var(--amarillo); color: var(--azul); border-color: var(--amarillo); }
+
+/* ===== SCREENS ===== */
+/* controlled by animation block below */
+
+/* ===== HERO ===== */
+#screen-home {
+  background: linear-gradient(135deg, #003087 0%, #0057C2 55%, #003087 100%);
+  min-height: calc(100vh - 62px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 3rem 1.5rem;
+  position: relative; overflow: hidden;
+}
+#screen-home::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 75% 40%, rgba(245,197,24,0.1) 0%, transparent 55%),
+              radial-gradient(ellipse at 25% 70%, rgba(0,87,194,0.3) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(245,197,24,0.15); border: 1px solid rgba(245,197,24,0.35);
+  color: var(--amarillo); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.4rem 1rem; border-radius: 20px; margin-bottom: 1.8rem;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-title {
+  font-family: 'Fraunces', serif; font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 1.2rem;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+.hero-title em { font-style: italic; color: var(--amarillo); }
+.hero-sub {
+  color: rgba(255,255,255,0.72); font-size: 1.05rem; max-width: 480px;
+  line-height: 1.7; margin-bottom: 2.5rem;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.6s ease 0.3s both; }
+.btn-hero {
+  background: var(--amarillo); color: var(--azul); border: none;
+  padding: 0.95rem 2.2rem; border-radius: 8px; font-weight: 700; font-size: 1rem;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  box-shadow: 0 4px 24px rgba(245,197,24,0.35); transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(245,197,24,0.45); }
+.btn-hero-sec {
+  background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.35);
+  padding: 0.95rem 2.2rem; border-radius: 8px; font-weight: 600; font-size: 1rem;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;
+}
+.btn-hero-sec:hover { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.08); }
+.hero-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; max-width: 560px; width: 100%; margin-top: 3.5rem;
+  animation: fadeUp 0.6s ease 0.4s both;
+}
+.stat-box {
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 12px; padding: 1.1rem 0.8rem; backdrop-filter: blur(10px);
+}
+.stat-n { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 900; color: var(--amarillo); }
+.stat-l { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+
+/* ===== FORM SECTION ===== */
+.form-screen { max-width: 620px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+.form-card {
+  background: var(--blanco); border-radius: 16px; padding: 2rem;
+  box-shadow: 0 4px 30px rgba(0,48,135,0.08); border: 1px solid var(--gris-borde);
+}
+.form-step-title {
+  font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 900;
+  color: var(--azul); margin-bottom: 0.4rem;
+}
+.form-step-sub { color: var(--gris-texto); font-size: 0.9rem; margin-bottom: 1.8rem; line-height: 1.5; }
+.form-group { margin-bottom: 1.3rem; }
+.form-label { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.5rem; color: var(--negro); }
+.form-input, .form-select {
+  width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--gris-borde);
+  border-radius: 8px; font-size: 0.95rem; font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--negro); transition: border-color 0.2s; outline: none; background: #fff;
+}
+.form-input:focus, .form-select:focus { border-color: var(--azul-medio); }
+.radio-group { display: flex; flex-direction: column; gap: 0.6rem; }
+.radio-opt {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.7rem 1rem; border: 2px solid var(--gris-borde); border-radius: 8px;
+  cursor: pointer; transition: all 0.2s; font-size: 0.9rem;
+}
+.radio-opt:hover { border-color: var(--azul-medio); background: var(--azul-suave); }
+.radio-opt input { accent-color: var(--azul); width: 16px; height: 16px; }
+.radio-opt.checked { border-color: var(--azul); background: var(--azul-suave); font-weight: 600; }
+.btn-next {
+  width: 100%; background: var(--azul); color: #fff; border: none;
+  padding: 0.95rem; border-radius: 8px; font-size: 1rem; font-weight: 700;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-top: 1.5rem; transition: background 0.2s;
+}
+.btn-next:hover { background: var(--azul-medio); }
+.btn-next:disabled { background: #94a3b8; cursor: not-allowed; }
+
+/* ===== QUIZ ===== */
+.quiz-screen { max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem; }
+.quiz-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.quiz-progress-bar { flex: 1; height: 6px; background: var(--gris-borde); border-radius: 3px; overflow: hidden; }
+.quiz-progress-fill { height: 100%; background: linear-gradient(90deg, var(--azul), var(--azul-medio)); border-radius: 3px; transition: width 0.4s ease; }
+.quiz-counter { font-size: 0.82rem; color: var(--gris-texto); white-space: nowrap; font-weight: 600; }
+.quiz-card {
+  background: var(--blanco); border-radius: 16px; padding: 2rem;
+  box-shadow: 0 4px 30px rgba(0,48,135,0.08); border: 1px solid var(--gris-borde);
+  animation: fadeUp 0.35s ease both;
+}
+.quiz-tag {
+  display: inline-block; background: var(--azul-suave); color: var(--azul);
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.3rem 0.8rem; border-radius: 20px; margin-bottom: 1rem;
+}
+.quiz-question {
+  font-size: 1.1rem; font-weight: 600; color: var(--negro);
+  line-height: 1.55; margin-bottom: 1.8rem;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 0.75rem; }
+.quiz-opt {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.2rem; border: 2px solid var(--gris-borde); border-radius: 10px;
+  cursor: pointer; transition: all 0.18s; font-weight: 500; font-size: 0.95rem;
+}
+.quiz-opt:hover { border-color: var(--azul-medio); background: var(--azul-suave); }
+.quiz-opt.selected { border-color: var(--azul); background: var(--azul-suave); font-weight: 700; }
+.quiz-opt-icon { font-size: 1.2rem; flex-shrink: 0; }
+.quiz-dot {
+  width: 18px; height: 18px; border-radius: 50%; border: 2px solid #cbd5e1;
+  margin-left: auto; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.quiz-opt.selected .quiz-dot { background: var(--azul); border-color: var(--azul); }
+.quiz-nav { display: flex; gap: 1rem; margin-top: 1.5rem; }
+.btn-back {
+  background: transparent; color: var(--gris-texto); border: 2px solid var(--gris-borde);
+  padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.2s;
+}
+.btn-back:hover { border-color: var(--azul); color: var(--azul); }
+.btn-advance {
+  flex: 1; background: var(--azul); color: #fff; border: none;
+  padding: 0.8rem; border-radius: 8px; font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s;
+}
+.btn-advance:hover { background: var(--azul-medio); }
+.btn-advance:disabled { background: #94a3b8; cursor: not-allowed; }
+
+/* ===== RESULTS ===== */
+.results-screen { max-width: 700px; margin: 0 auto; padding: 2rem 1.5rem; }
+.results-hero {
+  background: linear-gradient(135deg, var(--azul), var(--azul-medio));
+  border-radius: 16px; padding: 2rem; text-align: center; margin-bottom: 1.5rem;
+  color: #fff;
+}
+.results-title { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 0.4rem; }
+.results-sub { color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+
+.top-candidate {
+  background: var(--blanco); border-radius: 16px; padding: 1.8rem;
+  box-shadow: 0 4px 30px rgba(0,48,135,0.1); border: 2px solid var(--azul);
+  margin-bottom: 1.5rem;
+}
+.top-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--azul); margin-bottom: 1rem; }
+.top-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.top-avatar-wrap {
+  width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+  overflow: hidden; border: 2px solid var(--azul-suave);
+  background: linear-gradient(135deg, var(--azul), var(--azul-medio));
+}
+.top-avatar-img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.top-avatar-fallback {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  color: #fff; font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 900;
+}
+.top-party-row { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.2rem; }
+.party-logo-sm { height: 22px; width: auto; max-width: 60px; object-fit: contain; }
+.top-info { flex: 1; }
+.top-name { font-weight: 700; font-size: 1.1rem; color: var(--negro); }
+.top-party { font-size: 0.85rem; color: var(--gris-texto); }
+.top-pct { font-family: 'Fraunces', serif; font-size: 2.2rem; font-weight: 900; color: var(--azul); text-align: right; }
+.top-pct-label { font-size: 0.72rem; color: var(--gris-texto); text-align: right; }
+
+.axis-bars { display: flex; flex-direction: column; gap: 0.65rem; }
+.axis-row { display: flex; align-items: center; gap: 0.8rem; }
+.axis-label { font-size: 0.78rem; color: var(--gris-texto); width: 130px; flex-shrink: 0; }
+.axis-bg { flex: 1; height: 7px; background: var(--gris-borde); border-radius: 4px; overflow: hidden; }
+.axis-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+.axis-fill.high { background: linear-gradient(90deg, var(--azul), var(--azul-medio)); }
+.axis-fill.mid { background: var(--amarillo); }
+.axis-fill.low { background: var(--rojo); }
+.axis-pct { font-size: 0.78rem; font-weight: 700; color: var(--negro); width: 32px; text-align: right; }
+
+.all-results-title { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 900; color: var(--azul); margin-bottom: 1rem; }
+
+/* ===== LISTA VERTICAL ESTILO CR (mejorado) ===== */
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.result-card {
+  background: var(--blanco);
+  border-bottom: 1px solid var(--gris-borde);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  transition: background 0.18s;
+  position: relative;
+  min-height: 110px;
+}
+.result-card:first-child { border-radius: 14px 14px 0 0; }
+.result-card:last-child  { border-radius: 0 0 14px 14px; border-bottom: none; }
+.result-card:only-child  { border-radius: 14px; }
+.result-card:hover { background: var(--azul-suave); }
+
+/* Acento de color izquierdo por posición */
+.result-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: var(--azul-medio);
+  border-radius: 0;
+}
+.result-card.rank-1::before { background: linear-gradient(180deg, #f5c518, #e6a800); width: 6px; }
+.result-card.rank-2::before { background: #94a3b8; width: 6px; }
+.result-card.rank-3::before { background: #cd7c3a; width: 6px; }
+
+/* Barra de progreso — encima de toda la tarjeta */
+.card-bar-top {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--gris-borde);
+  z-index: 1;
+}
+.card-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--azul), var(--azul-medio));
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.result-card.rank-1 .card-bar-fill { background: linear-gradient(90deg, #e6a800, #f5c518); }
+.result-card.rank-2 .card-bar-fill { background: #94a3b8; }
+.result-card.rank-3 .card-bar-fill { background: linear-gradient(90deg, #a0522d, #cd7c3a); }
+
+/* Foto lateral izquierda */
+.card-photo-wrap {
+  width: 88px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: linear-gradient(160deg, #d0dcf5, var(--azul-suave));
+  position: relative;
+  margin-left: 5px; /* deja espacio al acento */
+}
+.card-photo {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+  display: block;
+}
+.card-photo-fallback {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 900;
+  color: var(--azul); opacity: 0.35;
+}
+
+/* Badge ranking sobre la foto */
+.card-rank-badge {
+  position: absolute;
+  bottom: 6px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fraunces', serif;
+  font-size: 0.68rem; font-weight: 900;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border-radius: 20px;
+  padding: 2px 9px;
+  white-space: nowrap;
+  z-index: 3;
+  backdrop-filter: blur(4px);
+}
+.result-card.rank-1 .card-rank-badge { background: var(--amarillo); color: var(--azul); }
+.result-card.rank-2 .card-rank-badge { background: #94a3b8; color: #fff; }
+.result-card.rank-3 .card-rank-badge { background: #cd7c3a; color: #fff; }
+
+/* Cuerpo derecho */
+.card-body {
+  flex: 1;
+  padding: 14px 14px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  padding-top: 18px; /* espacio para la barra superior */
+}
+
+/* Fila superior: porcentaje + logo */
+.card-top-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 4px;
+}
+
+/* Porcentaje grande */
+.card-pct {
+  font-family: 'Fraunces', serif;
+  font-size: 2.2rem; font-weight: 900;
+  color: var(--negro);
+  line-height: 1;
+}
+.result-card.rank-1 .card-pct { color: var(--azul); }
+
+/* Logo partido */
+.card-logo {
+  height: 32px; width: auto; max-width: 90px;
+  object-fit: contain;
+  border: 1px solid var(--gris-borde);
+  border-radius: 5px;
+  padding: 3px 5px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+/* Nombre y partido */
+.card-name {
+  font-weight: 700; font-size: 0.9rem;
+  color: var(--negro); line-height: 1.25;
+}
+.card-party {
+  font-size: 0.74rem; color: var(--gris-texto);
+  margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Botón coincidencias */
+.btn-coincidencias {
+  margin-top: 10px;
+  padding: 0.42rem 1rem;
+  background: var(--azul-medio); color: #fff;
+  border: none; border-radius: 20px;
+  font-size: 0.76rem; font-weight: 700;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: background 0.2s, transform 0.1s;
+  align-self: flex-start;
+}
+.btn-coincidencias:hover { background: var(--azul); transform: scale(1.03); }
+
+/* Modal de coincidencias */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55); z-index: 200;
+  align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 16px;
+  max-width: 480px; width: 100%; max-height: 85vh;
+  overflow-y: auto; padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.modal-header {
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 1.2rem;
+}
+.modal-photo {
+  width: 60px; height: 60px; border-radius: 50%;
+  object-fit: cover; object-position: top; border: 2px solid var(--azul-suave);
+}
+.modal-name { font-weight: 700; font-size: 1.05rem; }
+.modal-party-row { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.2rem; }
+.modal-logo { height: 20px; width: auto; max-width: 55px; object-fit: contain; }
+.modal-party { font-size: 0.82rem; color: var(--gris-texto); }
+.modal-pct-big { font-family: 'Fraunces', serif; font-size: 2.4rem; font-weight: 900; color: var(--azul); margin-left: auto; }
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--gris-borde); border: none; border-radius: 50%;
+  width: 32px; height: 32px; cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-box { position: relative; }
+.modal-axis-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gris-texto); margin-bottom: 0.8rem; }
+.modal-axis-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.55rem; }
+.modal-axis-label { font-size: 0.8rem; color: var(--negro); width: 140px; flex-shrink: 0; }
+.modal-axis-bg { flex: 1; height: 8px; background: var(--gris-borde); border-radius: 4px; overflow: hidden; }
+.modal-axis-fill { height: 100%; border-radius: 4px; }
+.modal-axis-fill.high { background: linear-gradient(90deg, var(--azul), var(--azul-medio)); }
+.modal-axis-fill.mid { background: var(--amarillo); }
+.modal-axis-fill.low { background: var(--rojo); }
+.modal-axis-pct { font-size: 0.78rem; font-weight: 700; color: var(--negro); width: 32px; text-align: right; }
+
+/* Result bar col - ya no se usa en grid pero por si acaso */
+.result-bar-col { width: 120px; flex-shrink: 0; }
+.result-bar-bg { height: 6px; background: var(--gris-borde); border-radius: 3px; overflow: hidden; margin-bottom: 0.25rem; }
+.result-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--azul), var(--azul-medio)); }
+.result-pct-text { font-size: 0.78rem; font-weight: 700; color: var(--azul); text-align: right; }
+
+.btn-restart {
+  width: 100%; background: var(--azul); color: #fff; border: none;
+  padding: 1rem; border-radius: 8px; font-size: 1rem; font-weight: 700;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-top: 1.5rem; transition: background 0.2s;
+}
+.btn-restart:hover { background: var(--azul-medio); }
+
+.share-row { display: flex; gap: 0.8rem; margin-top: 1rem; }
+.btn-share {
+  flex: 1; padding: 0.8rem; border-radius: 8px; font-size: 0.88rem; font-weight: 700;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; border: none; transition: all 0.2s;
+}
+.btn-share.twitter { background: #1DA1F2; color: #fff; }
+.btn-share.whatsapp { background: #25D366; color: #fff; }
+.btn-share.copy { background: var(--gris-fondo); color: var(--negro); border: 1px solid var(--gris-borde); }
+
+/* ===== SENDING ===== */
+.sending-screen {
+  min-height: calc(100vh - 62px); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 2rem;
+}
+.spinner {
+  width: 48px; height: 48px; border: 4px solid var(--azul-suave);
+  border-top-color: var(--azul); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 1rem;
+}
+.sending-title { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 900; color: var(--azul); }
+.sending-sub { color: var(--gris-texto); margin-top: 0.5rem; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp       { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn       { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeOut      { from { opacity:1; } to { opacity:0; } }
+@keyframes slideInRight { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
+@keyframes slideInLeft  { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
+@keyframes spin         { to { transform:rotate(360deg); } }
+@keyframes cardIn       { from { opacity:0; transform:translateY(22px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+/* Transición entre pantallas */
+.screen { display:none; }
+.screen.active { display:block; animation: fadeIn 0.35s cubic-bezier(.4,0,.2,1) both; }
+.screen.leaving { animation: fadeOut 0.18s ease forwards; }
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--azul); color: rgba(255,255,255,0.55);
+  text-align: center; padding: 1.2rem; font-size: 0.82rem; margin-top: 3rem;
+}
+footer strong { color: var(--amarillo); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 500px) {
+  .hero-stats { grid-template-columns: repeat(3,1fr); gap: 0.6rem; }
+  .stat-n { font-size: 1.6rem; }
+  .lang-btn { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+  .result-bar-col { width: 90px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="goHome()">Vot<span>ó</span>metro</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" onclick="setLang('qu')">QU</button>
+    <button class="lang-btn" onclick="setLang('ay')">AY</button>
+  </div>
+</nav>
+
+<!-- SCREEN: HOME -->
+<div id="screen-home" class="screen active">
+  <div class="hero-badge">🗳️ <span data-t="badge">Elecciones Perú 2026</span></div>
+  <h1 class="hero-title" data-t="heroTitle">Descubre con quién<br>coincides <em>de verdad</em></h1>
+  <p class="hero-sub" data-t="heroSub">Responde 24 preguntas sobre los temas que más importan y encuentra tu candidato ideal entre los 36 participantes.</p>
+  <div class="hero-btns">
+    <button class="btn-hero" onclick="startQuiz()" data-t="startBtn">Iniciar Votómetro →</button>
+    <button class="btn-hero-sec" onclick="scrollInfo()" data-t="howBtn">¿Cómo funciona?</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box"><div class="stat-n">36</div><div class="stat-l" data-t="stat1">Candidatos</div></div>
+    <div class="stat-box"><div class="stat-n">24</div><div class="stat-l" data-t="stat2">Preguntas</div></div>
+    <div class="stat-box"><div class="stat-n">8</div><div class="stat-l" data-t="stat3">Ejes temáticos</div></div>
+  </div>
+</div>
+
+<!-- SCREEN: PERFIL -->
+<div id="screen-perfil" class="screen">
+  <div class="form-screen">
+    <div class="form-card">
+      <div class="form-step-title" data-t="perfilTitle">Cuéntanos sobre ti</div>
+      <div class="form-step-sub" data-t="perfilSub">Tus datos son anónimos y se usan únicamente para investigación académica. No te identificamos de ninguna forma.</div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="edadLabel">Edad</label>
+        <input type="number" class="form-input" id="inp-edad" min="16" max="100" placeholder="Ej: 28">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="generoLabel">Género</label>
+        <div class="radio-group" id="rg-genero">
+          <label class="radio-opt"><input type="radio" name="genero" value="Masculino"> <span data-t="g1">Masculino</span></label>
+          <label class="radio-opt"><input type="radio" name="genero" value="Femenino"> <span data-t="g2">Femenino</span></label>
+          <label class="radio-opt"><input type="radio" name="genero" value="No binario"> <span data-t="g3">No binario / Otro</span></label>
+          <label class="radio-opt"><input type="radio" name="genero" value="Prefiero no decir"> <span data-t="g4">Prefiero no decir</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="regionLabel">Región / Departamento</label>
+        <select class="form-select" id="inp-region">
+          <option value="" data-t="regionPH">Selecciona tu región</option>
+          <option>Amazonas</option><option>Áncash</option><option>Apurímac</option>
+          <option>Arequipa</option><option>Ayacucho</option><option>Cajamarca</option>
+          <option>Callao</option><option>Cusco</option><option>Huancavelica</option>
+          <option>Huánuco</option><option>Ica</option><option>Junín</option>
+          <option>La Libertad</option><option>Lambayeque</option><option>Lima</option>
+          <option>Loreto</option><option>Madre de Dios</option><option>Moquegua</option>
+          <option>Pasco</option><option>Piura</option><option>Puno</option>
+          <option>San Martín</option><option>Tacna</option><option>Tumbes</option>
+          <option>Ucayali</option><option>Extranjero</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="educLabel">Nivel de educación</label>
+        <div class="radio-group" id="rg-educ">
+          <label class="radio-opt"><input type="radio" name="educ" value="Sin estudios"> <span data-t="e1">Sin estudios</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Primaria"> <span data-t="e2">Primaria</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Secundaria"> <span data-t="e3">Secundaria</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Técnico"> <span data-t="e4">Instituto / Técnico</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Universidad"> <span data-t="e5">Universidad</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Posgrado"> <span data-t="e6">Posgrado (Maestría / Doctorado)</span></label>
+        </div>
+      </div>
+
+      <button class="btn-next" id="btn-start-quiz" onclick="beginQuiz()" data-t="continueBtn">Continuar al test →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-screen">
+    <div class="quiz-top">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-bar"></div></div>
+      <div class="quiz-counter" id="quiz-counter">1 / 24</div>
+    </div>
+    <div class="quiz-card" id="quiz-card">
+      <div class="quiz-tag" id="quiz-tag"></div>
+      <div class="quiz-question" id="quiz-question"></div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-nav">
+        <button class="btn-back" onclick="prevQuestion()" id="btn-back" data-t="backBtn">← Anterior</button>
+        <button class="btn-advance" onclick="nextQuestion()" id="btn-advance" data-t="nextBtn" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: SENDING -->
+<div id="screen-sending" class="screen sending-screen">
+  <div class="spinner"></div>
+  <div class="sending-title" data-t="sendingTitle">Calculando resultados...</div>
+  <div class="sending-sub" data-t="sendingSub">Comparando tus respuestas con los 36 planes de gobierno</div>
+</div>
+
+<!-- SCREEN: RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="results-screen">
+    <div class="results-hero">
+      <div class="results-title" data-t="resultsTitle">Tus resultados</div>
+      <div class="results-sub" data-t="resultsSub">Basado en tus respuestas a las 24 preguntas</div>
+    </div>
+
+    <div class="top-candidate" id="top-candidate-card"></div>
+
+    <div style="margin-bottom:1.5rem">
+      <div class="all-results-title" data-t="allResultsTitle">Todos los candidatos</div>
+      <div class="results-grid" id="results-grid"></div>
+    </div>
+
+    <div class="share-row">
+      <button class="btn-share twitter" onclick="shareTwitter()" data-t="shareTwitter">🐦 Twitter</button>
+      <button class="btn-share whatsapp" onclick="shareWhatsapp()" data-t="shareWhatsapp">💬 WhatsApp</button>
+      <button class="btn-share copy" onclick="copyLink()" data-t="shareCopy">🔗 Copiar</button>
+    </div>
+
+    <button class="btn-restart" onclick="goHome()" data-t="restartBtn">🔄 Volver a hacer el test</button>
+  </div>
+</div>
+
+<!-- MODAL COINCIDENCIAS -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div class="modal-header" id="modal-header"></div>
+    <div class="modal-axis-title" style="margin-top:1rem">Coincidencia por eje temático</div>
+    <div id="modal-axes"></div>
+  </div>
+</div>
+
+<footer>
+  © 2026 <strong>Votómetro</strong> · Proyecto de impacto social · Datos usados solo para investigación anónima
+</footer>
+
+<script>
+// =============================================
+// TRANSLATIONS
+// =============================================
+const T = {
+  es: {
+    badge: "Elecciones Perú 2026", heroTitle: "Descubre con quién<br>coincides <em>de verdad</em>",
+    heroSub: "Responde 24 preguntas sobre los temas que más importan y encuentra tu candidato ideal entre los 36 participantes.",
+    startBtn: "Iniciar Votómetro →", howBtn: "¿Cómo funciona?",
+    stat1: "Candidatos", stat2: "Preguntas", stat3: "Ejes temáticos",
+    perfilTitle: "Cuéntanos sobre ti",
+    perfilSub: "Tus datos son anónimos y se usan únicamente para investigación académica.",
+    edadLabel: "Edad", generoLabel: "Género", regionLabel: "Región / Departamento", educLabel: "Nivel de educación",
+    g1:"Masculino", g2:"Femenino", g3:"No binario / Otro", g4:"Prefiero no decir",
+    e1:"Sin estudios", e2:"Primaria", e3:"Secundaria", e4:"Instituto / Técnico", e5:"Universidad", e6:"Posgrado",
+    continueBtn: "Continuar al test →", backBtn: "← Anterior", nextBtn: "Siguiente →",
+    finishBtn: "Ver mis resultados →",
+    sendingTitle: "Calculando resultados...", sendingSub: "Comparando tus respuestas con los 36 planes de gobierno",
+    resultsTitle: "Tus resultados", resultsSub: "Basado en tus respuestas a las 24 preguntas",
+    topLabel: "🏆 Tu candidato más afín", matchLabel: "coincidencia",
+    allResultsTitle: "Todos los candidatos", restartBtn: "🔄 Volver a hacer el test",
+    shareTwitter: "🐦 Twitter", shareWhatsapp: "💬 WhatsApp", shareCopy: "🔗 Copiar",
+    agree: "De acuerdo", neutral: "Neutral", disagree: "En desacuerdo",
+    regionPH: "Selecciona tu región"
+  },
+  qu: {
+    badge: "Perú 2026 Akllay", heroTitle: "Pitaq kanki <em>cheqaqtam</em> rikunki",
+    heroSub: "Iskay chunka tawayuq tapuykusman kutichiy, 36 akllakuqkunawan tupachiy.",
+    startBtn: "Qallariy →", howBtn: "Imaynatan rurasqa?",
+    stat1: "Akllakuqkuna", stat2: "Tapuykuna", stat3: "Temakuna",
+    perfilTitle: "Willawayku qanmanta",
+    perfilSub: "Willayniyki mana sutiyki rikunanpaq, yachaqaypaqmi.",
+    edadLabel: "Watayuq", generoLabel: "Kaynikipi", regionLabel: "Suyu", educLabel: "Yachay atin",
+    g1:"Qari", g2:"Warmi", g3:"Hukkunan", g4:"Mana willakuyta munanichu",
+    e1:"Mana yachaqasqa", e2:"Pisi yachay", e3:"Chunka yachay", e4:"Técnico", e5:"Universidad", e6:"Posgrado",
+    continueBtn: "Tapuyman riy →", backBtn: "← Ñaupaq", nextBtn: "Qatiq →",
+    finishBtn: "Resultadoyta qaway →",
+    sendingTitle: "Yuyaychakuchkani...", sendingSub: "36 propuestakunawan tupachichkani",
+    resultsTitle: "Resultadoykikuna", resultsSub: "24 kutichisqaykiwan",
+    topLabel: "🏆 Sinchi tupaq akllakuqniyki", matchLabel: "tupaq",
+    allResultsTitle: "Tukuy akllakuqkuna", restartBtn: "🔄 Qallarimuy",
+    shareTwitter: "🐦 Twitter", shareWhatsapp: "💬 WhatsApp", shareCopy: "🔗 Copiy",
+    agree: "Ari niniy", neutral: "Chaynillan", disagree: "Mana niniy",
+    regionPH: "Suyuykita akllay"
+  },
+  ay: {
+    badge: "Perú 2026 Elijiña", heroTitle: "Kimsa <em>cheqa</em> ukanxa yatita",
+    heroSub: "Tunka paqallquni tapuqaru kutichaña, 36 candidatukana ukana elijiña.",
+    startBtn: "Qalltaña →", howBtn: "Kunamatsa rurata?",
+    stat1: "Candidatukuna", stat2: "Tapuqkuna", stat3: "Temakuna",
+    perfilTitle: "Jiwasatakiwa willaña",
+    perfilSub: "Willawipaxa sutima uñstayañatakiwa, yatxatawirakiwa.",
+    edadLabel: "Maranaka", generoLabel: "Kaypacha", regionLabel: "Suyu", educLabel: "Yatiqaña",
+    g1:"Chacha", g2:"Warmi", g3:"Janiwa", g4:"Amuyt'añasa janiwa munistu",
+    e1:"Janiwa yatiqata", e2:"Nayriri yatiqaña", e3:"Qhispiri yatiqaña", e4:"Técnico", e5:"Universidad", e6:"Posgrado",
+    continueBtn: "Tapuqaruwa saraña →", backBtn: "← Nayraqata", nextBtn: "Qhiphaña →",
+    finishBtn: "Resultaduma uñjaña →",
+    sendingTitle: "Yatxatachkta...", sendingSub: "36 propuestanakampi uñt'ayachkta",
+    resultsTitle: "Resultadunakama", resultsSub: "Tunka paqallqunini tapuqanaka",
+    topLabel: "🏆 Aski candidatuma", matchLabel: "uñt'ayawi",
+    allResultsTitle: "Tukuri candidatunaka", restartBtn: "🔄 Mayta qalltaña",
+    shareTwitter: "🐦 Twitter", shareWhatsapp: "💬 WhatsApp", shareCopy: "🔗 Copiaña",
+    agree: "Ukhamawa", neutral: "Chiqpachawa", disagree: "Janiwa ukhamakiti",
+    regionPH: "Suyuma akllaña"
+  }
+};
+
+let currentLang = 'es';
+function t(key) { return T[currentLang][key] || T['es'][key] || key; }
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn')[['es','qu','ay'].indexOf(lang)].classList.add('active');
+  applyTranslations();
+  if (currentQ >= 0) renderQuestion(currentQ);
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    const val = t(key);
+    if (val) el.innerHTML = val;
+  });
+}
+
+// =============================================
+// DATA
+// =============================================
+const AXES = {
+  es: ['💰 Economía','💰 Economía','💰 Economía','🛡️ Seguridad','🛡️ Seguridad','🛡️ Seguridad',
+       '📚 Educación y Salud','📚 Educación y Salud','📚 Educación y Salud',
+       '🌿 Medio Ambiente','🌿 Medio Ambiente','🌿 Medio Ambiente',
+       '⚖️ Corrupción','⚖️ Corrupción','⚖️ Corrupción',
+       '🌎 Política Exterior','🌎 Política Exterior','🌎 Política Exterior',
+       '👥 Género y DDHH','👥 Género y DDHH','👥 Género y DDHH',
+       '🗺️ Descentralización','🗺️ Descentralización','🗺️ Descentralización'],
+  qu: ['💰 Qullqi','💰 Qullqi','💰 Qullqi','🛡️ Seguridad','🛡️ Seguridad','🛡️ Seguridad',
+       '📚 Yachay','📚 Yachay','📚 Yachay','🌿 Pachamama','🌿 Pachamama','🌿 Pachamama',
+       '⚖️ Qhichuwakuy','⚖️ Qhichuwakuy','⚖️ Qhichuwakuy',
+       '🌎 Hawa Suyukuna','🌎 Hawa Suyukuna','🌎 Hawa Suyukuna',
+       '👥 Warmi-Qari','👥 Warmi-Qari','👥 Warmi-Qari',
+       '🗺️ Suyu Kamachiynin','🗺️ Suyu Kamachiynin','🗺️ Suyu Kamachiynin'],
+  ay: ['💰 Qullqi','💰 Qullqi','💰 Qullqi','🛡️ Seguridada','🛡️ Seguridada','🛡️ Seguridada',
+       '📚 Yatiqaña','📚 Yatiqaña','📚 Yatiqaña','🌿 Pachamama','🌿 Pachamama','🌿 Pachamama',
+       '⚖️ Laqhachawi','⚖️ Laqhachawi','⚖️ Laqhachawi',
+       '🌎 Hawa Suyunaka','🌎 Hawa Suyunaka','🌎 Hawa Suyunaka',
+       '👥 Warmi-Chacha','👥 Warmi-Chacha','👥 Warmi-Chacha',
+       '🗺️ Suyu Kamana','🗺️ Suyu Kamana','🗺️ Suyu Kamana']
+};
+
+const QUESTIONS = {
+  es: [
+    "El Estado debe controlar directamente sectores estratégicos como minería, petróleo y energía, en lugar de dejarlos en manos privadas.",
+    "El gobierno debe reducir impuestos a las empresas para atraer más inversión privada y generar empleo.",
+    "El Perú debe priorizar el crecimiento económico aunque eso implique flexibilizar normas ambientales y laborales.",
+    "El Estado debe aplicar penas más duras y reducir beneficios penitenciarios para combatir la delincuencia.",
+    "Las Fuerzas Armadas deben poder intervenir en zonas urbanas para apoyar a la Policía en el control del crimen organizado.",
+    "La prevención social (educación, empleo, rehabilitación) es más efectiva que el encarcelamiento para reducir la delincuencia.",
+    "El Estado debe garantizar educación pública gratuita y de calidad en todos los niveles, incluyendo la universidad.",
+    "El Estado debe permitir y fomentar la participación privada en la gestión de hospitales y colegios públicos.",
+    "El Perú debe avanzar hacia un sistema de salud universal donde todos los ciudadanos tengan la misma cobertura.",
+    "Los proyectos mineros y de extracción deben poder avanzar aunque comunidades locales se opongan, si generan beneficios económicos.",
+    "El Perú debe comprometerse con metas climáticas internacionales aunque eso limite el desarrollo de industrias extractivas.",
+    "Las comunidades indígenas deben tener derecho a veto sobre proyectos extractivos en sus territorios.",
+    "Los funcionarios públicos condenados por corrupción deben quedar inhabilitados de por vida para ejercer cargos públicos.",
+    "El Congreso debe tener menos poder para censurar ministros y vacar presidentes, para darle más estabilidad al gobierno.",
+    "El Perú necesita una nueva Constitución para reformar el Estado desde sus bases.",
+    "El Perú debe endurecer los controles migratorios y deportar a extranjeros que cometan delitos en el país.",
+    "El Perú debe romper relaciones diplomáticas con Venezuela y Nicaragua por ser regímenes autoritarios.",
+    "El Perú debe priorizar tratados de libre comercio con más países para impulsar las exportaciones.",
+    "El matrimonio civil debe estar disponible para parejas del mismo sexo.",
+    "El aborto debe ser legal en casos de violación, no solo cuando la vida de la madre está en riesgo.",
+    "El Estado debe implementar cuotas de género obligatorias en cargos públicos y empresas privadas.",
+    "Las regiones deben tener mayor autonomía para decidir cómo gastar sus presupuestos sin depender del gobierno central.",
+    "El canon minero y gasífero debe quedarse íntegramente en las regiones donde se extrae el recurso.",
+    "El Perú debería evaluar un modelo federal donde cada región tenga su propio gobierno con poderes legislativos."
+  ],
+  qu: [
+    "Estadom directamente controlanan minería, petróleo, energía suyukuna, mana privadokunaman qunankupaq.",
+    "Gobiernom empresakunap impuestonta pisiyachinman, inversión privadatam maskhanankupaq.",
+    "Perúm wiñayninta munanan, chaypim medio ambiente leykunata fleciblichinman.",
+    "Estadom sinchita castiganqa suwakuqkunata, prisiónpi beneficiokunata pisiyachinankupaq.",
+    "Fuerzas Armadasmi llaqtakunapi yanapanman policiatam, crimen organizadota atipanankupaq.",
+    "Yachay, trabajo, rehabilitaciónmi aswanmi allin kausayta churayta atinman, prisiónmanta aswanpis.",
+    "Estadom garantizananmi gratuito allin yachayta tukuy nivelpi, universidadtapis.",
+    "Estadom permitinanmi privadokunam hospitalkuna, escuelakunata manejananpaq.",
+    "Perúm huk salud universalman rishanman, tukuykunam huk coberturaya kashanankupaq.",
+    "Minas extractivas proyectokuna ñannin kananpaq atinanmi, comunidadkuna chiqnichinapipis, beneficio kaqtin.",
+    "Perúm comprometisqa kananmi metas climáticaswan, extractivas limitakuspapis.",
+    "Comunidades indígenasmi vetoyta atinman territorio proyectos extractivospi.",
+    "Corrupciónmanta huchayuq funcionariokunam wiñaytan inhabilitasqa kananku.",
+    "Congresomi pisipuni atiyniyuq kananman ministrokunata censuranankupaq.",
+    "Perúm musan Constituciónta maskhanman, Estado llimpu reformanankupaq.",
+    "Perúm migracionta controlananmi, huchayuq extranjerokuna deportasqa kananankupaq.",
+    "Perúm Venezuela, Nicaraguawan diplomacia cortananman, autoritarismo kasqanrayku.",
+    "Perúm libre comercio tratadokunata maskhanman, exportacionesta wiñachinanpaq.",
+    "Matrimonio civilmi igualitario kananman, mismo sexo parejaskunapaq.",
+    "Aborto legalmi kananman violación casokunapaq.",
+    "Estadom cuotas de género obligatoriosta churananman cargos públicospi.",
+    "Regionesmi mayor autonomíayuq kananman presupuestonta manejanankupaq.",
+    "Canon minero y gaserosomi regiones propiospi qhedananman.",
+    "Perúm modelo federal evaluananman, sapa región propio gobierno kananpaq."
+  ],
+  ay: [
+    "Estadowa directamente controlarapxañani minería, petróleo, energía suyunaka, janiwa privadunakamaki.",
+    "Gobiernoxa empresa impuestonaka pisiyañani, inversión privada maskhawinakampi.",
+    "Perúxa wiñañataki munañani, ukhamata medio ambiente leynaka kamachañani.",
+    "Estadoxa sinchita castigarapxañani suwanaka, prisión beneficionaka pisiyañataki.",
+    "Fuerzas Armadasxa markanakanxa yanapt'añani policiata, crimen organizado atipañataki.",
+    "Yatiqaña, trabaju, rehabilitaciónxa aski suma kawsayta churañataki, prisiónmanta askata.",
+    "Estadoxa garantizañani gratuito yatiqaña tukuri nivelana, universidadampi.",
+    "Estadoxa permitiñani privadunaka hospitalnaka, escuelanaka manejañataki.",
+    "Perúxa huk salud universal lurañataki, tukuri salud cobertura ukhamata.",
+    "Minas extractivas proyectonaka sartañataki atiñani, comunidadnaka inayankapuna, beneficio kañataki.",
+    "Perúxa comprometisqarakiwa metas climáticas, extractivas limitañatakipuni.",
+    "Comunidades indígenasxa vetoxa utjañani territoriona extractivos proyectonakataki.",
+    "Corrupción huchata katxatata funcionarionaka wiñayata inhabilitasqarakiwa.",
+    "Congresoxa pisipuni atiyata katjañani ministros censurarañataki.",
+    "Perúxa musan Constituciónxa maskhasqarakiwa, Estado reforma lurañataki.",
+    "Perúxa migración kontrolarañani, huchatata extranjem deportarañataki.",
+    "Perúxa Venezuela, Nicaragua diplomacia cortarañani, autoritarismo ukhamata.",
+    "Perúxa libre comercio tratado maskharañani, exportaciones wiñayañataki.",
+    "Matrimonio civilxa igualitario kañani, mismo sexo parejanakataki.",
+    "Aborto legalxa kañani violación kasunakataki.",
+    "Estadoxa cuotas de género obligatorios churañani cargos públicosnakana.",
+    "Regionesxa mayor autonomía katjañani presupuesto manejañataki.",
+    "Canon minero y gasíferoxa regiones propionakanxa qhiparakiwa.",
+    "Perúxa modelo federal yatxatañani, sapa región propio gobierno ukhamata."
+  ]
+};
+
+// Candidate positions: 1=agree, 0=neutral, -1=disagree
+const CANDIDATES = [
+  { name: "Keiko Fujimori", party: "Fuerza Popular", initials: "KF",
+    photo: "https://mpesije.jne.gob.pe/apidocs/251cd1c0-acc7-4338-bd8a-439ccb9238d0.jpeg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/1366",
+    pos: [-1,1,1,1,1,0,1,-1,0,1,0,-1,1,1,-1,1,1,1,-1,-1,0,0,0,-1] },
+  { name: "Rafael López Aliaga", party: "Renovación Popular", initials: "RL",
+    photo: "https://mpesije.jne.gob.pe/apidocs/b2e00ae2-1e50-4ad3-a103-71fc7e4e8255.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/22",
+    pos: [-1,1,0,1,1,-1,1,1,0,1,0,-1,1,0,-1,1,1,1,-1,-1,-1,1,1,-1] },
+  { name: "César Acuña", party: "Alianza para el Progreso", initials: "CA",
+    photo: "https://mpesije.jne.gob.pe/apidocs/d6fe3cac-7061-474b-8551-0aa686a54bad.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/1257",
+    pos: [-1,1,1,1,1,0,1,1,1,1,1,0,1,1,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "José Williams", party: "Avanza País", initials: "JW",
+    photo: "https://mpesije.jne.gob.pe/apidocs/b60c471f-a6bb-4b42-a4b2-02ea38acbb0d.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2173",
+    pos: [-1,1,1,1,1,0,1,1,1,1,1,0,1,0,-1,1,1,1,0,0,1,1,1,0] },
+  { name: "George Forsyth", party: "Somos Perú", initials: "GF",
+    photo: "https://mpesije.jne.gob.pe/apidocs/b1d60238-c797-4cba-936e-f13de6a34cc7.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/14",
+    pos: [0,0,-1,1,0,1,1,0,1,0,1,1,1,1,0,1,0,1,0,0,1,1,1,0] },
+  { name: "Yonhy Lescano", party: "Cooperación Popular", initials: "YL",
+    photo: "https://mpesije.jne.gob.pe/apidocs/b9db2b5c-02ff-4265-ae51-db9b1001ad70.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2995",
+    pos: [1,-1,-1,1,1,1,1,-1,1,-1,1,1,1,0,0,0,-1,0,0,1,1,1,1,0] },
+  { name: "Vladimir Cerrón", party: "Perú Libre", initials: "VC",
+    photo: "https://mpesije.jne.gob.pe/apidocs/82ee0ff2-2336-4aba-9590-e576f7564315.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2218",
+    pos: [1,-1,-1,0,0,1,1,-1,1,-1,0,1,0,1,1,-1,-1,-1,0,1,1,1,1,0] },
+  { name: "Mario Vizcarra", party: "Perú Primero", initials: "MV",
+    photo: "https://mpesije.jne.gob.pe/apidocs/ee7a080e-bc81-4c81-9e5e-9fd95ff459ab.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2925",
+    pos: [0,0,-1,1,1,1,1,0,1,0,1,0,1,1,0,1,0,1,0,0,1,1,1,0] },
+  { name: "José Luna Gálvez", party: "Podemos Perú", initials: "JL",
+    photo: "https://mpesije.jne.gob.pe/apidocs/a669a883-bf8a-417c-9296-c14b943c3943.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2731",
+    pos: [0,1,0,1,1,0,1,1,1,1,1,0,1,1,0,1,0,1,0,0,1,1,1,-1] },
+  { name: "Mesías Guevara", party: "Partido Morado", initials: "MG",
+    photo: "https://mpesije.jne.gob.pe/apidocs/1b861ca7-3a5e-48b4-9024-08a92371e33b.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2840",
+    pos: [-1,0,-1,1,0,1,1,0,1,-1,1,1,1,1,0,0,0,1,1,1,1,1,0,0] },
+  { name: "Rafael Belaunde", party: "Libertad Popular", initials: "RB",
+    photo: "https://mpesije.jne.gob.pe/apidocs/3302e45b-55c8-4979-a60b-2b11097abf1d.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2933",
+    pos: [-1,1,0,1,1,0,1,1,1,1,1,0,1,1,-1,1,1,1,1,1,1,1,1,-1] },
+  { name: "Pitter Valderrama", party: "Partido Aprista", initials: "PV",
+    photo: "https://mpesije.jne.gob.pe/apidocs/d72c4b29-e173-42b8-b40d-bdb6d01a526a.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2930",
+    pos: [0,0,-1,1,1,1,1,0,1,0,1,0,1,1,1,0,-1,0,0,0,1,1,1,0] },
+  { name: "Roberto Sánchez", party: "Juntos por el Perú", initials: "RS",
+    photo: "https://mpesije.jne.gob.pe/apidocs/bb7c7465-9c6e-44eb-ac7d-e6cc7f872a1a.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/1264",
+    pos: [1,-1,-1,1,0,1,1,-1,1,-1,1,1,1,1,1,-1,-1,-1,1,1,1,1,1,0] },
+  { name: "Roberto Chiabra", party: "Unidad Nacional", initials: "RC",
+    photo: "https://mpesije.jne.gob.pe/apidocs/5c703ce9-ba1e-4490-90bf-61006740166f.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/3023",
+    pos: [-1,1,1,1,1,-1,1,1,1,1,0,-1,1,1,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "Fiorella Molinelli", party: "Fuerza y Libertad", initials: "FM",
+    photo: "https://mpesije.jne.gob.pe/apidocs/1de656b5-7593-4c60-ab7a-83d618a3d80d.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/3024",
+    pos: [-1,1,1,1,1,-1,1,1,1,1,1,-1,1,0,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "Carlos Álvarez", party: "País para Todos", initials: "CÁ",
+    photo: "https://mpesije.jne.gob.pe/apidocs/2bd18177-d665-413d-9694-747d729d3e39.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2956",
+    pos: [-1,1,1,1,1,-1,1,1,1,1,1,0,1,1,-1,1,1,1,0,0,1,1,1,0] },
+  { name: "Rosario Fernández", party: "Un Camino Diferente", initials: "RF",
+    photo: "https://mpesije.jne.gob.pe/apidocs/ac0b0a59-ead5-4ef1-8ef8-8967e322d6ca.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2998",
+    pos: [-1,0,-1,1,1,0,1,0,1,0,1,0,1,0,0,1,0,0,0,0,0,1,1,1] },
+  { name: "Jorge Nieto", party: "Partido del Buen Gobierno", initials: "JN",
+    photo: "https://mpesije.jne.gob.pe/apidocs/9ae56ed5-3d0f-49ff-8bb9-0390bad71816.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2961",
+    pos: [0,0,-1,1,0,1,1,0,1,0,1,1,1,1,0,0,0,0,1,1,1,1,1,0] },
+  { name: "F. Diez-Canseco", party: "Perú Acción", initials: "FD",
+    photo: "https://mpesije.jne.gob.pe/apidocs/2d1bf7f2-6e88-4ea9-8ed2-975c1ae5fb92.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2932",
+    pos: [-1,1,1,1,1,-1,1,1,1,1,0,-1,1,1,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "Napoleón Becerra", party: "PTE-Perú", initials: "NB",
+    photo: "https://mpesije.jne.gob.pe/apidocs/bab206cb-b2d5-41ec-bde8-ef8cf3e0a2df.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2939",
+    pos: [1,-1,-1,1,0,1,1,-1,1,-1,0,1,1,0,1,0,-1,0,0,0,0,1,1,0] },
+  { name: "Wolfgang Grozo", party: "Integridad Democrática", initials: "WG",
+    photo: "https://mpesije.jne.gob.pe/apidocs/064360d1-ce49-4abe-939c-f4de8b0130a2.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2985",
+    pos: [-1,1,0,1,1,1,1,1,1,0,1,0,1,1,-1,1,0,0,-1,1,1,1,1,-1] },
+  { name: "Antonio Ortiz", party: "Salvemos al Perú", initials: "AO",
+    photo: "https://mpesije.jne.gob.pe/apidocs/8e6b9124-2883-4143-8768-105f2ce780eb.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2927",
+    pos: [-1,1,0,1,0,0,1,1,1,1,1,0,1,1,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "Paul Jaimes", party: "Progresemos", initials: "PJ",
+    photo: "https://mpesije.jne.gob.pe/apidocs/929e1a63-335d-4f3a-ba26-f3c7ff136213.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2967",
+    pos: [0,0,-1,1,1,1,1,0,1,0,1,1,1,1,0,1,0,0,0,0,1,1,1,0] },
+  { name: "Alfonso López Chau", party: "Ahora Nación", initials: "AL",
+    photo: "https://mpesije.jne.gob.pe/apidocs/ddfa74eb-cae3-401c-a34c-35543ae83c57.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2980",
+    pos: [0,0,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,1,0] },
+  { name: "Ronald Atencio", party: "Alianza Venceremos", initials: "RA",
+    photo: "https://mpesije.jne.gob.pe/apidocs/bac0288d-3b21-45ac-8849-39f9177fb020.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/3025",
+    pos: [1,-1,-1,1,0,1,1,-1,1,-1,1,1,1,1,1,-1,-1,0,0,0,1,1,1,0] },
+  { name: "Ricardo Belmont", party: "Partido Cívico Obras", initials: "RBe",
+    photo: "https://mpesije.jne.gob.pe/apidocs/78647f15-d5d1-4ed6-8ac6-d599e83eeea3.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2941",
+    pos: [-1,1,0,1,1,0,1,1,1,1,0,0,1,1,-1,1,1,1,0,0,0,1,1,-1] },
+  { name: "Charlie Carrasco", party: "Demócrata Unido", initials: "CC",
+    photo: "https://mpesije.jne.gob.pe/apidocs/12fa17db-f28f-4330-9123-88549539b538.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2867",
+    pos: [0,0,0,1,0,0,1,0,1,0,1,0,1,1,0,0,0,0,0,0,0,1,1,0] },
+  { name: "Alex González", party: "Demócrata Verde", initials: "AG",
+    photo: "https://mpesije.jne.gob.pe/apidocs/c0ae56bf-21c1-4810-890a-b25c8465bdd9.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2895",
+    pos: [-1,0,-1,1,0,1,1,0,1,-1,1,1,1,1,0,0,0,1,1,1,1,1,1,0] },
+  { name: "Armando Masse", party: "Democrático Federal", initials: "AM",
+    photo: "https://mpesije.jne.gob.pe/apidocs/cb1adeb7-7d2f-430c-ae87-519137d8edfa.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2986",
+    pos: [0,0,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1] },
+  { name: "Fernando Olivera", party: "Frente de la Esperanza 2021", initials: "FO",
+    photo: "https://mpesije.jne.gob.pe/apidocs/3e2312e1-af79-4954-abfa-a36669c1a9e9.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2857",
+    pos: [1,-1,-1,1,1,1,1,-1,1,-1,1,1,1,0,1,-1,-1,0,0,0,1,1,1,0] },
+  { name: "Carlos Espá", party: "Partido SíCreo", initials: "CE",
+    photo: "https://mpesije.jne.gob.pe/apidocs/85935f77-6c46-4eab-8c7e-2494ffbcece0.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2935",
+    pos: [-1,1,0,1,1,0,1,1,1,1,0,0,1,1,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "Carlos Jaico", party: "Perú Moderno", initials: "CJ",
+    photo: "https://mpesije.jne.gob.pe/apidocs/7d91e14f-4417-4d61-89ba-3e686dafaa95.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2924",
+    pos: [-1,1,0,1,1,0,1,0,1,0,1,0,1,1,-1,1,0,0,0,0,1,1,1,0] },
+  { name: "Marisol Pérez Tello", party: "Primero la Gente", initials: "MP",
+    photo: "https://mpesije.jne.gob.pe/apidocs/073703ca-c427-44f0-94b1-a782223a5e10.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2931",
+    pos: [0,0,-1,1,0,1,1,0,1,0,1,1,1,1,0,1,0,1,0,0,1,1,1,0] },
+  { name: "Álvaro Paz de la Barra", party: "Fe en el Perú", initials: "AP",
+    photo: "https://votoinformado.jne.gob.pe/assets/images/candidatos/ALVARO%20PAZ%20DE%20LA%20BARRA.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2898",
+    pos: [-1,1,0,1,1,-1,1,1,1,1,0,-1,1,0,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "Herbert Caller", party: "Partido Patriótico del Perú", initials: "HC",
+    photo: "https://mpesije.jne.gob.pe/apidocs/6ad6c5ff-0411-4ddd-9cf7-b0623f373fcf.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2869",
+    pos: [-1,1,0,1,1,0,1,1,1,1,0,0,1,1,-1,1,1,1,-1,-1,0,1,1,-1] },
+  { name: "Walter Chirinos", party: "PRIN", initials: "WC",
+    photo: "https://mpesije.jne.gob.pe/apidocs/a2d0f631-fe47-4c41-92ba-7ed9f4095520.jpg",
+    logo: "https://sroppublico.jne.gob.pe/Consulta/Simbolo/GetSimbolo/2921",
+    pos: [0,0,0,1,1,0,1,0,1,0,0,0,1,0,0,1,0,0,0,0,0,1,1,0] },
+];
+
+// =============================================
+// STATE
+// =============================================
+let userProfile = {};
+let answers = new Array(24).fill(null);
+let currentQ = 0;
+let quizDirection = 1; // 1=forward, -1=backward
+
+// =============================================
+// NAVIGATION
+// =============================================
+function showScreen(id) {
+  const current = document.querySelector('.screen.active');
+  const next = document.getElementById(id);
+  if (current && current !== next) {
+    current.classList.add('leaving');
+    setTimeout(() => {
+      current.classList.remove('active', 'leaving');
+      next.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }, 180);
+  } else {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'leaving'));
+    next.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+}
+
+function goHome() {
+  answers = new Array(24).fill(null);
+  currentQ = 0;
+  userProfile = {};
+  showScreen('screen-home');
+  applyTranslations();
+}
+
+function startQuiz() { showScreen('screen-perfil'); applyTranslations(); }
+
+function beginQuiz() {
+  const edad = document.getElementById('inp-edad').value;
+  const genero = document.querySelector('input[name="genero"]:checked');
+  const region = document.getElementById('inp-region').value;
+  const educ = document.querySelector('input[name="educ"]:checked');
+
+  if (!edad || !genero || !region || !educ) {
+    alert(currentLang === 'es' ? 'Por favor completa todos los campos.' :
+          currentLang === 'qu' ? 'Ama hukta qonkaychu.' : 'Tukuri jikxataña.');
+    return;
+  }
+
+  userProfile = {
+    edad: parseInt(edad),
+    genero: genero.value,
+    region: region,
+    educacion: educ.value,
+    idioma: currentLang
+  };
+
+  currentQ = 0;
+  answers = new Array(24).fill(null);
+  showScreen('screen-quiz');
+  renderQuestion(0);
+}
+
+// =============================================
+// QUIZ LOGIC
+// =============================================
+function renderQuestion(idx) {
+  const questions = QUESTIONS[currentLang] || QUESTIONS.es;
+  const axes = AXES[currentLang] || AXES.es;
+  const total = questions.length;
+  const pct = ((idx) / total * 100).toFixed(0);
+
+  document.getElementById('quiz-bar').style.width = pct + '%';
+  document.getElementById('quiz-counter').textContent = (idx + 1) + ' / ' + total;
+  document.getElementById('quiz-tag').textContent = axes[idx];
+  document.getElementById('quiz-question').textContent = questions[idx];
+
+  const opts = document.getElementById('quiz-options');
+  const icons = ['✅', '🤔', '❌'];
+  const vals = [1, 0, -1];
+  const labels = [t('agree'), t('neutral'), t('disagree')];
+
+  opts.innerHTML = '';
+  vals.forEach((v, i) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-opt' + (answers[idx] === v ? ' selected' : '');
+    div.innerHTML = `<span class="quiz-opt-icon">${icons[i]}</span>
+      <span>${labels[i]}</span>
+      <div class="quiz-dot">${answers[idx] === v ? '<svg width="10" height="8" viewBox="0 0 10 8"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}</div>`;
+    div.onclick = () => selectAnswer(idx, v);
+    opts.appendChild(div);
+  });
+
+  const isLast = idx === total - 1;
+  const advBtn = document.getElementById('btn-advance');
+  advBtn.textContent = isLast ? t('finishBtn') : t('nextBtn');
+  advBtn.disabled = answers[idx] === null;
+  document.getElementById('btn-back').style.visibility = idx === 0 ? 'hidden' : 'visible';
+
+  // animate card only when navigating, not when selecting an answer
+  if (!renderQuestion._selecting) {
+    const card = document.getElementById('quiz-card');
+    card.style.animation = 'none';
+    void card.offsetHeight;
+    const anim = quizDirection >= 0 ? 'slideInRight' : 'slideInLeft';
+    card.style.animation = anim + ' 0.35s cubic-bezier(.4,0,.2,1) both';
+  }
+}
+
+function selectAnswer(idx, val) {
+  answers[idx] = val;
+  renderQuestion._selecting = true;
+  renderQuestion(idx);
+  renderQuestion._selecting = false;
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < 23) {
+    quizDirection = 1;
+    currentQ++;
+    renderQuestion(currentQ);
+  } else {
+    calculateResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    quizDirection = -1;
+    currentQ--;
+    renderQuestion(currentQ);
+  }
+}
+
+// =============================================
+// RESULTS
+// =============================================
+function calculateResults() {
+  showScreen('screen-sending');
+
+  setTimeout(() => {
+    // Calculate match %
+    const scored = CANDIDATES.map(c => {
+      let match = 0, total = 0;
+      answers.forEach((a, i) => {
+        if (a !== null) {
+          total++;
+          if (a === c.pos[i]) match += 2;
+          else if (Math.abs(a - c.pos[i]) === 1) match += 1;
+        }
+      });
+      const pct = total > 0 ? Math.round((match / (total * 2)) * 100) : 0;
+      return { ...c, pct };
+    }).sort((a, b) => b.pct - a.pct);
+
+    sendToGoogleForms(scored[0].name, scored[0].pct);
+    renderResults(scored);
+    showScreen('screen-results');
+  }, 2200);
+}
+
+function getAxisScore(candPos, axis) {
+  // axis: 0=eco(0-2), 1=seg(3-5), 2=edu(6-8), 3=amb(9-11), 4=cor(12-14), 5=pol(15-17), 6=gen(18-20), 7=des(21-23)
+  const ranges = [[0,3],[3,6],[6,9],[9,12],[12,15],[15,18],[18,21],[21,24]];
+  const [start, end] = ranges[axis];
+  let match = 0, total = 0;
+  for (let i = start; i < end; i++) {
+    if (answers[i] !== null) {
+      total++;
+      if (answers[i] === candPos[i]) match += 2;
+      else if (Math.abs(answers[i] - candPos[i]) === 1) match += 1;
+    }
+  }
+  return total > 0 ? Math.round((match / (total * 2)) * 100) : 0;
+}
+
+function renderResults(scored) {
+  const top = scored[0];
+  const axisNames = {
+    es: ['Economía','Seguridad','Educación/Salud','Medio Ambiente','Corrupción','Política Exterior','Género/DDHH','Descentralización'],
+    qu: ['Qullqi','Seguridad','Yachay','Pachamama','Qhichuwakuy','Hawa Suyu','Warmi-Qari','Suyu'],
+    ay: ['Qullqi','Seguridada','Yatiqaña','Pachamama','Laqhachawi','Hawa Suyu','Warmi-Chacha','Suyu Kamana']
+  };
+  const anames = axisNames[currentLang] || axisNames.es;
+
+  // Top card
+  const axisScores = [0,1,2,3,4,5,6,7].map(i => ({ name: anames[i], pct: getAxisScore(top.pos, i) }));
+  const topCard = document.getElementById('top-candidate-card');
+  topCard.innerHTML = `
+    <div class="top-label">${t('topLabel')}</div>
+    <div class="top-row">
+      <div class="top-avatar-wrap">
+        <img class="top-avatar-img" src="${top.photo}" alt="${top.name}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="top-avatar-fallback" style="display:none">${top.initials}</div>
+      </div>
+      <div class="top-info">
+        <div class="top-name">${top.name}</div>
+        <div class="top-party-row">
+          <img class="party-logo-sm" src="${top.logo}" alt="${top.party}" onerror="this.style.display='none'">
+          <span class="top-party">${top.party}</span>
+        </div>
+      </div>
+      <div>
+        <div class="top-pct">${top.pct}%</div>
+        <div class="top-pct-label">${t('matchLabel')}</div>
+      </div>
+    </div>
+    <div class="axis-bars">
+      ${axisScores.map((ax,ai) => `
+        <div class="axis-row">
+          <div class="axis-label">${ax.name}</div>
+          <div class="axis-bg"><div class="axis-fill ${ax.pct>=60?'high':ax.pct>=35?'mid':'low'}" style="width:0%;transition:width 0.8s cubic-bezier(.4,0,.2,1) ${400+ai*80}ms;" data-pct="${ax.pct}"></div></div>
+          <div class="axis-pct">${ax.pct}%</div>
+        </div>`).join('')}
+    </div>`;
+
+  // Animate top card axis bars
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll('.axis-fill[data-pct]').forEach(bar => {
+      bar.style.width = bar.dataset.pct + '%';
+    });
+  }));
+
+  window._scoredCandidates = scored;
+  window._axisNames = anames;
+
+  const rankClass = ['rank-1','rank-2','rank-3'];
+  const grid = document.getElementById('results-grid');
+  grid.innerHTML = scored.map((c, i) => `
+    <div class="result-card ${rankClass[i]||''}" style="opacity:0;animation:cardIn 0.4s cubic-bezier(.4,0,.2,1) ${i*60}ms both;">
+      <div class="card-bar-top">
+        <div class="card-bar-fill" style="width:0%;transition:width 0.9s cubic-bezier(.4,0,.2,1) ${300+i*50}ms;"></div>
+      </div>
+      <div class="card-photo-wrap">
+        <img class="card-photo" src="${c.photo}" alt="${c.name}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-photo-fallback" style="display:none">${c.initials}</div>
+        <div class="card-rank-badge">${i===0?'🏆 #1':i===1?'🥈 #2':i===2?'🥉 #3':'#'+(i+1)}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-top-info">
+          <div class="card-pct">${c.pct}%</div>
+          <img class="card-logo" src="${c.logo}" alt="${c.party}" onerror="this.style.display='none'">
+        </div>
+        <div class="card-name">${c.name}</div>
+        <div class="card-party">${c.party}</div>
+        <button class="btn-coincidencias" onclick="openModal(${i})">Ver coincidencias →</button>
+      </div>
+    </div>`).join('');
+
+  // Trigger bar animations after cards render
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll('.card-bar-fill').forEach((bar, i) => {
+      bar.style.width = scored[i].pct + '%';
+    });
+  }));
+}
+
+// =============================================
+// MODAL COINCIDENCIAS
+// =============================================
+function openModal(idx) {
+  const scored = window._scoredCandidates;
+  const anames = window._axisNames;
+  if (!scored) return;
+  const c = scored[idx];
+  const axisScores = [0,1,2,3,4,5,6,7].map(i => ({ name: anames[i], pct: getAxisScore(c.pos, i) }));
+
+  document.getElementById('modal-header').innerHTML = `
+    <img class="modal-photo" src="${c.photo}" alt="${c.name}" onerror="this.style.display='none'">
+    <div style="flex:1;min-width:0">
+      <div class="modal-name">${c.name}</div>
+      <div class="modal-party-row">
+        <img class="modal-logo" src="${c.logo}" alt="${c.party}" onerror="this.style.display='none'">
+        <span class="modal-party">${c.party}</span>
+      </div>
+    </div>
+    <div class="modal-pct-big">${c.pct}%</div>`;
+
+  document.getElementById('modal-axes').innerHTML = axisScores.map(ax => `
+    <div class="modal-axis-row">
+      <div class="modal-axis-label">${ax.name}</div>
+      <div class="modal-axis-bg">
+        <div class="modal-axis-fill ${ax.pct>=60?'high':ax.pct>=35?'mid':'low'}" style="width:${ax.pct}%"></div>
+      </div>
+      <div class="modal-axis-pct">${ax.pct}%</div>
+    </div>`).join('');
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+
+// =============================================
+// GOOGLE FORMS SUBMISSION
+// =============================================
+function sendToGoogleForms(topCandidate, topPct) {
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzaZwQQlT6f3hbtBLxMuv9zb6NjEvg4rG3gp1_Xz-vy8rNYcs_BXe7Jo0QOkf1YSunZSg/exec';
+
+  const respuestasData = answers.map((a,i) => `P${i+1}:${a===1?'A':a===0?'N':'D'}`).join(',');
+
+  const payload = {
+    edad:       userProfile.edad,
+    genero:     userProfile.genero,
+    region:     userProfile.region,
+    educacion:  userProfile.educacion,
+    idioma:     userProfile.idioma === 'es' ? 'Español' : userProfile.idioma === 'qu' ? 'Quechua' : 'Aymara',
+    candidato:  `${topCandidate} (${topPct}%)`,
+    respuestas: respuestasData
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(() => {});
+}
+
+// =============================================
+// SHARE
+// =============================================
+function shareTwitter() {
+  const text = currentLang === 'es'
+    ? '¡Hice el Votómetro y descubrí con qué candidato coincido! Pruébalo tú también 🗳️'
+    : 'Hice el Votómetro 🗳️';
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`);
+}
+
+function shareWhatsapp() {
+  const text = currentLang === 'es'
+    ? '¡Hice el Votómetro y descubrí con qué candidato coincido! Pruébalo: '
+    : 'Hice el Votómetro: ';
+  window.open(`https://wa.me/?text=${encodeURIComponent(text + window.location.href)}`);
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    alert(currentLang === 'es' ? '¡Enlace copiado!' : 'Copiado!');
+  });
+}
+
+function scrollInfo() {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+// Radio styling
+document.addEventListener('change', function(e) {
+  if (e.target.type === 'radio') {
+    const group = e.target.closest('.radio-group');
+    if (group) {
+      group.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('checked'));
+      e.target.closest('.radio-opt').classList.add('checked');
+    }
+  }
+});
+
+// Init
+applyTranslations();
+</script>
+</body>
+</html>
