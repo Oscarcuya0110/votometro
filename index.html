@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Votómetro – Elecciones Perú 2026</title>
+
+<!-- Fuentes de Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Estilos de la aplicación -->
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="goHome()">Vot<span>ó</span>metro</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('es')">ES</button>
+    <button class="lang-btn" onclick="setLang('qu')">QU</button>
+    <button class="lang-btn" onclick="setLang('ay')">AY</button>
+  </div>
+</nav>
+
+<!-- WRAPPER — contiene todas las pantallas para que position:absolute
+     durante las transiciones no desborde el layout -->
+<div id="app-root">
+
+<!-- SCREEN: HOME -->
+<div id="screen-home" class="screen active">
+  <div class="hero-badge">🗳️ <span data-t="badge">Elecciones Perú 2026</span></div>
+  <h1 class="hero-title" data-t="heroTitle">Descubre con quién<br>coincides <em>de verdad</em></h1>
+  <p class="hero-sub" data-t="heroSub">Responde 24 preguntas sobre los temas que más importan y encuentra tu candidato ideal entre los 36 participantes.</p>
+  <div class="hero-btns">
+    <button class="btn-hero" onclick="startQuiz()" data-t="startBtn">Iniciar Votómetro →</button>
+    <button class="btn-hero-sec" onclick="scrollInfo()" data-t="howBtn">¿Cómo funciona?</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box"><div class="stat-n">36</div><div class="stat-l" data-t="stat1">Candidatos</div></div>
+    <div class="stat-box"><div class="stat-n">22</div><div class="stat-l" data-t="stat2">Preguntas</div></div>
+    <div class="stat-box"><div class="stat-n">8</div><div class="stat-l" data-t="stat3">Ejes temáticos</div></div>
+  </div>
+</div>
+
+<!-- SCREEN: PERFIL -->
+<div id="screen-perfil" class="screen">
+  <div class="form-screen">
+    <div class="form-card">
+      <div class="form-step-title" data-t="perfilTitle">Cuéntanos sobre ti</div>
+      <div class="form-step-sub" data-t="perfilSub">Tus datos son anónimos y se usan únicamente para investigación académica. No te identificamos de ninguna forma.</div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="edadLabel">Edad</label>
+        <input type="number" class="form-input" id="inp-edad" min="16" max="100" placeholder="Ej: 28">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="generoLabel">Género</label>
+        <div class="radio-group" id="rg-genero">
+          <label class="radio-opt"><input type="radio" name="genero" value="Masculino"> <span data-t="g1">Masculino</span></label>
+          <label class="radio-opt"><input type="radio" name="genero" value="Femenino"> <span data-t="g2">Femenino</span></label>
+          <label class="radio-opt"><input type="radio" name="genero" value="No binario"> <span data-t="g3">No binario / Otro</span></label>
+          <label class="radio-opt"><input type="radio" name="genero" value="Prefiero no decir"> <span data-t="g4">Prefiero no decir</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="regionLabel">Región / Departamento</label>
+        <select class="form-select" id="inp-region">
+          <option value="" data-t="regionPH">Selecciona tu región</option>
+          <option>Amazonas</option><option>Áncash</option><option>Apurímac</option>
+          <option>Arequipa</option><option>Ayacucho</option><option>Cajamarca</option>
+          <option>Callao</option><option>Cusco</option><option>Huancavelica</option>
+          <option>Huánuco</option><option>Ica</option><option>Junín</option>
+          <option>La Libertad</option><option>Lambayeque</option><option>Lima</option>
+          <option>Loreto</option><option>Madre de Dios</option><option>Moquegua</option>
+          <option>Pasco</option><option>Piura</option><option>Puno</option>
+          <option>San Martín</option><option>Tacna</option><option>Tumbes</option>
+          <option>Ucayali</option><option>Extranjero</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" data-t="educLabel">Nivel de educación</label>
+        <div class="radio-group" id="rg-educ">
+          <label class="radio-opt"><input type="radio" name="educ" value="Sin estudios"> <span data-t="e1">Sin estudios</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Primaria"> <span data-t="e2">Primaria</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Secundaria"> <span data-t="e3">Secundaria</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Técnico"> <span data-t="e4">Instituto / Técnico</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Universidad"> <span data-t="e5">Universidad</span></label>
+          <label class="radio-opt"><input type="radio" name="educ" value="Posgrado"> <span data-t="e6">Posgrado (Maestría / Doctorado)</span></label>
+        </div>
+      </div>
+
+      <button class="btn-next" id="btn-start-quiz" onclick="beginQuiz()" data-t="continueBtn">Continuar al test →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-screen">
+    <div class="quiz-top">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-bar"></div></div>
+      <div class="quiz-counter" id="quiz-counter">1 / 24</div>
+    </div>
+    <div class="quiz-card" id="quiz-card">
+      <div class="quiz-tag" id="quiz-tag"></div>
+      <div class="quiz-question" id="quiz-question"></div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-nav">
+        <button class="btn-back" onclick="prevQuestion()" id="btn-back" data-t="backBtn">← Anterior</button>
+        <button class="btn-advance" onclick="nextQuestion()" id="btn-advance" data-t="nextBtn" disabled>Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: SENDING (pantalla de carga mientras calcula) -->
+<div id="screen-sending" class="screen sending-screen">
+  <div class="spinner"></div>
+  <div class="sending-title" data-t="sendingTitle">Calculando resultados...</div>
+  <div class="sending-sub" data-t="sendingSub">Comparando tus respuestas con los 36 planes de gobierno</div>
+</div>
+
+<!-- SCREEN: RESULTS -->
+<div id="screen-results" class="screen">
+  <div class="results-screen">
+    <div class="results-hero">
+      <div class="results-title" data-t="resultsTitle">Tus resultados</div>
+      <div class="results-sub" data-t="resultsSub">Basado en tus respuestas a las 22 preguntas</div>
+    </div>
+
+    <!-- La tarjeta del candidato #1 se inyecta aquí desde results.js -->
+    <div class="top-candidate" id="top-candidate-card"></div>
+
+    <div style="margin-bottom:1.5rem">
+      <div class="all-results-title" data-t="allResultsTitle">Todos los candidatos</div>
+      <!-- El grid de 36 tarjetas se inyecta aquí desde results.js -->
+      <div class="results-grid" id="results-grid"></div>
+    </div>
+
+    <div class="share-row">
+      <button class="btn-share twitter"  onclick="shareTwitter()"  data-t="shareTwitter">🐦 Twitter</button>
+      <button class="btn-share whatsapp" onclick="shareWhatsapp()" data-t="shareWhatsapp">💬 WhatsApp</button>
+      <button class="btn-share copy"     onclick="copyLink()"      data-t="shareCopy">🔗 Copiar</button>
+    </div>
+
+    <button class="btn-restart" onclick="goHome()" data-t="restartBtn">🔄 Volver a hacer el test</button>
+  </div>
+</div>
+
+</div><!-- /app-root -->
+
+<!-- MODAL: Coincidencias por eje temático -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    <div class="modal-header" id="modal-header"></div>
+    <div class="modal-axis-title" style="margin-top:1rem">Coincidencia por eje temático</div>
+    <div id="modal-axes"></div>
+  </div>
+</div>
+
+<footer>
+  © 2026 <strong>Votómetro</strong> · Proyecto de impacto social · Datos usados solo para investigación anónima
+</footer>
+
+<!--
+  ORDEN DE CARGA DE SCRIPTS — importante mantenerlo así:
+  1. translations.js → define T, currentLang, t(), setLang(), applyTranslations()
+  2. data.js         → define AXES, QUESTIONS, CANDIDATES (usan t() de translations)
+  3. quiz.js         → define showScreen(), goHome(), beginQuiz(), renderQuestion()
+                       (usa AXES, QUESTIONS, CANDIDATES y t())
+  4. results.js      → define calculateResults(), renderResults(), openModal()
+                       (usa CANDIDATES, answers, userProfile, t())
+
+  Si cambias el orden, algunas funciones no estarán definidas cuando
+  otras las necesiten y verás errores "X is not defined" en la consola.
+-->
+<script src="js/translations.js"></script>
+<script src="js/data.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/results.js"></script>
+
+<script>
+  // Inicialización: aplica las traducciones del idioma por defecto (ES)
+  // al cargar la página por primera vez.
+  applyTranslations();
+</script>
+
+</body>
+</html>
